@@ -28,7 +28,7 @@ TAB* maior(TAB* a) {
     TAB* max_esq = maior(a->esq);
     TAB* max_dir = maior(a->dir);
 
-    TAB* max = a; // começa assumindo que o próprio nó é o maior
+    TAB* max = a; 
 
     if (max_esq && max_esq->info > max->info)
         max = max_esq;
