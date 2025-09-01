@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "q009.h"
+#include "q008.h"
 
 typedef struct arvbin {
     int info;
@@ -27,16 +27,16 @@ void TAB_imp_pre(TAB* a) {
     }
 }
 
-int nf(TAB* a) {
+int ni(TAB* a) {
     if (!a) return 0;
 
-    int eh_folha;
+    int eh_no;
 
-    if (!a->dir && !a->esq) {
-        eh_folha = 1;
+    if ((a->esq && a->dir) || (!a->esq && a->dir) || (a->esq && !a->dir)) {
+        eh_no = 1;
     } else {
-        eh_folha = 0;
+        eh_no = 0;
     }
 
-    return eh_folha + nf(a->esq) + nf(a->dir);
+    return eh_no + ni(a->esq) + ni(a->dir);
 }

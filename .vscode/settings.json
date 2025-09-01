@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "q003_q004.h": "c"
+        "q003_q004.h": "c",
+        "q006.h": "c"
     }
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "q005.h"
+#include "q006.h"
 
 typedef struct arvbin {
     int info;
@@ -56,12 +56,17 @@ TAB* retira_pares(TAB* arv) {
             return temp;
         }
         else {
-            // Caso 4: dois filhos
-            // Estratégia: substitui pelo maior da subárvore esquerda
-            TAB* maior = arv->esq;
-            while (maior->dir) maior = maior->dir;
-            arv->info = maior->info;
-            arv->esq = retira_pares(arv->esq);
+            // Caso 4: dois filhos -> escolhe arbitrariamente a esquerda
+            temp = arv->esq;
+
+            // Para não perder a subárvore direita, pendura ela no "fim" da subárvore esquerda (opcional)
+            TAB* aux = temp;
+            while (aux->dir) 
+                aux = aux->dir;
+            aux->dir = arv->dir;
+
+            free(arv);
+            return temp;
         }
     }
     return arv;
