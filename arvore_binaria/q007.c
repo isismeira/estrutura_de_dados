@@ -20,7 +20,7 @@ TAB* TAB_cria(int raiz, TAB* esq, TAB* dir){
     return novo;
 }
 
-TAB* TAB_imp_pre(TAB* a) {
+void TAB_imp_pre(TAB* a) {
     if (a) {
         printf("%d\n", a->info);
         TAB_imp_pre(a->esq);
