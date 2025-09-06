@@ -14,4 +14,4 @@ void TABB_imp_sim(TABB *a);
 TABB *TABB_retira(TABB *a, int info);
 
 int* mN(TABB* a, int N);
-void aux_mN(TABB* a, int valor, int* vetor, int contador);
+void aux_mN(TABB* a, int valor, int* vetor, int* contador);

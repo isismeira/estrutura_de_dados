@@ -56,18 +56,21 @@ TABB *TABB_retira(TABB *a, int info){
 
 int* mN(TABB* a, int N) {
     int* vetor = malloc(100 * sizeof(int)); // aloca espaço
-    aux_mN(a,N,vetor,0);
+    int contador = 0;
+    aux_mN(a,N,vetor,&contador);
+    vetor = realloc(vetor, contador * sizeof(int));
     return vetor;
 }
 
-void aux_mN(TABB* a, int valor, int* vetor, int contador) {
+void aux_mN(TABB* a, int valor, int* vetor, int* contador) {
     if(a) {
         if (a->info >= valor)
             aux_mN(a->esq, valor, vetor, contador);
         else {
-            vetor[contador] = a->info;
-            if(a->esq) aux_mN(a->esq, valor, vetor, contador+1); 
-            if(a->dir) aux_mN(a->dir, valor, vetor, contador+1); 
+            vetor[*contador] = a->info;
+            (*contador)++;
+            if(a->esq) aux_mN(a->esq, valor, vetor, contador); 
+            if(a->dir) aux_mN(a->dir, valor, vetor, contador); 
         }    
     }
 }
