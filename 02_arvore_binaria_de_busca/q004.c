@@ -54,6 +54,7 @@ TABB *TABB_retira(TABB *a, int info){
   return a; 
 }
 
+// IMPORTANTE! RETORNO DE UM VETOR
 int* mN(TABB* a, int N) {
     int* vetor = malloc(100 * sizeof(int)); // aloca espaço
     int contador = 0;
