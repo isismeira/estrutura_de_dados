@@ -1,0 +1,40 @@
+ÁRVORE BINÁRIA SIMPLES -------------------------------------------------------------------------------------
+
+1) Faça uma função que soma todos os elementos de nível ímpar em uma árvore binária simples e subtraia todos os de nível par - int misc1(TAB *a).
+
+2) Faça uma função que encontra a média simples de elementos em cada nível de uma árvore binária simples - int *media(TAB *a, int *tam_vet).
+
+3) Retorne o nó de maior nível que é ancestral tanto de N quanto de M - TAB* maior_nivel(TAB *a, int N, int M).
+
+4) Retorne a quantidade de caminhos que somam N em uma árvore binária simples - int quant_caminhos(TAB *a, int N).
+
+5) Retornar todas as informações ancestrais de um nó na árvore binária, da raiz da árvore até o elemento passado como parâmetro, usando a biblioteca de lista encadeada - TLSEINT* misc(TAB *a, int elem), onde:
+
+typedef struct lseint{
+  int lim_inf, lim_sup;
+  struct lseint *prox;
+} TLSEINT;
+
+6) Escreva uma função que receba uma árvore binária e teste as seguintes propriedades: (a) se o nó se encontra no nível par, ele tem ZERO ou dois filhos; e (b) se ele está no nível ímpar, ele só pode ter UM filho. A função retorna UM, se a árvore segue essas propriedades, e ZERO, caso contrário. A função deve ter o seguinte protótipo: int teste_arv(TAB* a); 
+
+
+ÁRVORE BINÁRIA DE BUSCA -------------------------------------------------------------------------------------
+
+7) Faça uma função que encontra todos os elementos maiores que N  em uma ABB e retorne num vetor ordenado, não utilize nenhum algoritmo de ordenação - int *maioresN(TABB *a, int N, int *tam_vet).
+
+8) Faça uma função que encontra todos os elementos menores que N em uma ABB e retorne num vetor ordenado, não utilize nenhum algoritmo de ordenação - int *menoresN(TABB *a, int N, int *tam_vet).
+
+9) Reescreva (5) com TABB;
+
+10) Refaça (6) com TABB.
+
+GRAFOS  -------------------------------------------------------------------------------------
+11) Faça uma função que descubra se um grafo não direcionado é cíclico - int dir_ciclico(TG *g).
+
+12) Faça uma função que descubra se um grafo não direcionado é conectado - int dir_conect(TG *g).
+
+13) Exercícios de grafos do Instagram/Facebook.
+
+14) Dado um grafo conectado, verifique se ele pode ser transformado em uma árvore binária. Se ele pode ser uma árvore binária, retorne um. Se não, retorne zero. DICA: use TLSE para resolver esta questão: int teste (TG *g); e
+
+15) Dados um grafo, dois nós x e y, retorne um caminho qualquer entre x e y. Se não tiver caminho, o retorno é NULL: TLSE *caminho (TG *g, int x, int y).
