@@ -134,123 +134,52 @@ TG* TG_retira_no(TG *g, int no){
   return g;
 }
 
-// 15) Dados um grafo, dois nós x e y, retorne um caminho qualquer entre x e y. Se não tiver caminho, o retorno é NULL: TLSE *caminho (TG *g, int x, int y).
 
-typedef struct TLSE{
-  int id;
-  struct TLSE *prox;
-} TLSE;
-
-TLSE* TLSE_inicializa(void){
-  return NULL;
-}
-
-TLSE* TLSE_insere(TLSE *l, int id){
-  TLSE *novo = (TLSE *) malloc(sizeof(TLSE));
-  novo->prox = l;
-  novo->id = id;
-  return novo;
-}
-
-// Mudança: função faltando, adicionada
-TLSE* TLSE_insere_fim(TLSE *l, int id) {
-  TLSE *novo = (TLSE *) malloc(sizeof(TLSE));
-  novo->id = id;
-  novo->prox = NULL;
-  if(!l) return novo;
-  TLSE *p = l;
-  while(p->prox) p = p->prox;
-  p->prox = novo;
-  return l;
-}
-
-TLSE *TLSE_copia(TLSE *l) {
-  if (!l) return NULL;
-  TLSE *nova = TLSE_inicializa();
-  for (TLSE *p = l; p; p = p->prox)
-    nova = TLSE_insere_fim(nova, p->id); // Mudança: corrigido nome do campo e função
-  return nova;
-}
-
-void TLSE_libera(TLSE *l){
-  TLSE *p = l, *q;
-  while(p){
-    q = p;
-    p = p->prox;
-    free(q);
-  } 
-}
-
-int TLSE_tamanho(TLSE* l) {
-  int contador = 0;
-  for (TLSE* p = l; p; p = p->prox)
-    contador++;
-  return contador;
-}
-
-// ------------------- FUNÇÕES DE GRAFO -------------------
+// Faça uma função que conta quantos caminhos únicos têm entre dois nós. int conta_cam(TG* g, int no1, int no2);
 
 int conta_nos(TG *g) {
-  int n = 0;
-  while (g) {
-    n++;
-    g = g->prox_no;
-  }
-  return n;
+    int n = 0;
+    while (g) {
+        n++;
+        g = g->prox_no;
+    }
+    return n;
 }
 
 int indice_no(TG *g, int id) {
-  int i = 0;
-  while (g) {
-    if (g->id_no == id)
-      return i;
-    g = g->prox_no;
-    i++;
-  }
-  return -1;
-}
-
-int dfs_tem_caminho(TG* g, TLSE** l ,int* visitados, int atual, int y){
-  visitados[indice_no(g, atual)] = 1;
-  *l = TLSE_insere(*l, atual);
-  if (atual == y) {
-    return 1;
-  }  
-  TG* no_atual = TG_busca_no(g, atual);
-  for (TVIZ *v = no_atual->prim_viz; v; v = v->prox_viz) {
-    int idx_vizinho = indice_no(g, v->id_viz);
-    if(!visitados[idx_vizinho])
-      if(dfs_tem_caminho(g, l, visitados, v->id_viz, y))
-        return 1;
-  }
-  return 0;
-}
-
-// ------------------- MENOR CAMINHO -------------------
-
-TLSE* menor_caminho(TG *g, int x, int y) {
-  TG* no_1 = TG_busca_no(g, x);
-  if(!no_1) return NULL; 
-  int n = conta_nos(g);
-
-  TLSE* menor_caminho = TLSE_inicializa(); 
-
-  for (TVIZ *v = no_1->prim_viz; v; v = v->prox_viz) {
-    TLSE* um_caminho = TLSE_inicializa();
-    int* visitados = calloc(n, sizeof(int));
-    visitados[indice_no(g,no_1->id_no)] = 1;
-    um_caminho = TLSE_insere(um_caminho, no_1->id_no);
-    if (dfs_tem_caminho(g, &um_caminho ,visitados,v->id_viz, y)) {  //&um_caminho
-      if (!menor_caminho) 
-        menor_caminho = TLSE_copia(um_caminho);
-      else if (TLSE_tamanho(um_caminho) < TLSE_tamanho(menor_caminho)) {
-        TLSE_libera(menor_caminho); // !!!
-        menor_caminho = TLSE_copia(um_caminho);
-      }
+    int i = 0;
+    while (g) {
+        if (g->id_no == id)
+            return i;
+        g = g->prox_no;
+        i++;
     }
-    free(visitados);
-    TLSE_libera(um_caminho);    
-  }
+    return -1;
+}
 
-  return menor_caminho;
+int dfs_tem_caminho(TG* g, int* visitados, int atual, int y){
+    if (atual == y) return 1;
+    visitados[indice_no(g, atual)] = 1;
+    TG* no_atual = TG_busca_no(g, atual);
+    for (TVIZ *v = no_atual->prim_viz; v; v = v->prox_viz) {
+        int idx_vizinho = indice_no(g, v->id_viz);
+        if(!visitados[idx_vizinho])
+            if(dfs_tem_caminho(g, visitados, v->id_viz, y))
+                return 1;
+    }
+    return 0;
+}
+
+int conta_cam(TG* g, int no1, int no2) {
+    TG* x =TG_busca_no(g, no1);
+    int qtd_caminhos = 0;
+    int n = conta_nos(g);
+    for (TVIZ *v = x->prim_viz; v; v = v->prox_viz) {
+        int* visitados = calloc(n, sizeof(int));
+        visitados[indice_no(g,no1)] = 1;
+        if (dfs_tem_caminho(g, visitados, v->id_viz, no2))
+            qtd_caminhos++;
+        free(visitados)    
+    }
+    return qtd_caminhos;
 }

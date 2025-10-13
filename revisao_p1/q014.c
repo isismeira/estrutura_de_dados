@@ -134,123 +134,70 @@ TG* TG_retira_no(TG *g, int no){
   return g;
 }
 
-// 15) Dados um grafo, dois nós x e y, retorne um caminho qualquer entre x e y. Se não tiver caminho, o retorno é NULL: TLSE *caminho (TG *g, int x, int y).
+// 14) Dado um grafo conectado, verifique se ele pode ser transformado em uma árvore binária. Se ele pode ser uma árvore binária, retorne um. Se não, retorne zero. DICA: use TLSE para resolver esta questão: int teste (TG *g); e
+
+// 1) Cada nó do grafo não pode apontar para mais de dois nós
+// 2) Cada nó só pode ser apontado por um nó (só pode ter um pai)
 
 typedef struct TLSE{
-  int id;
-  struct TLSE *prox;
+  int pai, filho_1, filho_2;
+  struct lseint *prox;
 } TLSE;
 
 TLSE* TLSE_inicializa(void){
   return NULL;
 }
 
-TLSE* TLSE_insere(TLSE *l, int id){
+TLSE* TLSE_insere(TLSE *l, int pai, int filho_1, int filho_2){
   TLSE *novo = (TLSE *) malloc(sizeof(TLSE));
   novo->prox = l;
-  novo->id = id;
+  novo->pai = pai;
+  novo->filho_1 = filho_1;
+  novo->filho_2 = filho_2;
   return novo;
 }
 
-// Mudança: função faltando, adicionada
-TLSE* TLSE_insere_fim(TLSE *l, int id) {
-  TLSE *novo = (TLSE *) malloc(sizeof(TLSE));
-  novo->id = id;
-  novo->prox = NULL;
-  if(!l) return novo;
-  TLSE *p = l;
-  while(p->prox) p = p->prox;
-  p->prox = novo;
-  return l;
-}
-
-TLSE *TLSE_copia(TLSE *l) {
-  if (!l) return NULL;
-  TLSE *nova = TLSE_inicializa();
-  for (TLSE *p = l; p; p = p->prox)
-    nova = TLSE_insere_fim(nova, p->id); // Mudança: corrigido nome do campo e função
-  return nova;
-}
-
-void TLSE_libera(TLSE *l){
-  TLSE *p = l, *q;
-  while(p){
-    q = p;
-    p = p->prox;
-    free(q);
-  } 
-}
-
-int TLSE_tamanho(TLSE* l) {
-  int contador = 0;
-  for (TLSE* p = l; p; p = p->prox)
-    contador++;
-  return contador;
-}
-
-// ------------------- FUNÇÕES DE GRAFO -------------------
-
-int conta_nos(TG *g) {
-  int n = 0;
-  while (g) {
-    n++;
-    g = g->prox_no;
-  }
-  return n;
-}
-
-int indice_no(TG *g, int id) {
-  int i = 0;
-  while (g) {
-    if (g->id_no == id)
-      return i;
-    g = g->prox_no;
-    i++;
-  }
-  return -1;
-}
-
-int dfs_tem_caminho(TG* g, TLSE** l ,int* visitados, int atual, int y){
-  visitados[indice_no(g, atual)] = 1;
-  *l = TLSE_insere(*l, atual);
-  if (atual == y) {
-    return 1;
-  }  
-  TG* no_atual = TG_busca_no(g, atual);
-  for (TVIZ *v = no_atual->prim_viz; v; v = v->prox_viz) {
-    int idx_vizinho = indice_no(g, v->id_viz);
-    if(!visitados[idx_vizinho])
-      if(dfs_tem_caminho(g, l, visitados, v->id_viz, y))
-        return 1;
-  }
-  return 0;
-}
-
-// ------------------- MENOR CAMINHO -------------------
-
-TLSE* menor_caminho(TG *g, int x, int y) {
-  TG* no_1 = TG_busca_no(g, x);
-  if(!no_1) return NULL; 
-  int n = conta_nos(g);
-
-  TLSE* menor_caminho = TLSE_inicializa(); 
-
-  for (TVIZ *v = no_1->prim_viz; v; v = v->prox_viz) {
-    TLSE* um_caminho = TLSE_inicializa();
-    int* visitados = calloc(n, sizeof(int));
-    visitados[indice_no(g,no_1->id_no)] = 1;
-    um_caminho = TLSE_insere(um_caminho, no_1->id_no);
-    if (dfs_tem_caminho(g, &um_caminho ,visitados,v->id_viz, y)) {  //&um_caminho
-      if (!menor_caminho) 
-        menor_caminho = TLSE_copia(um_caminho);
-      else if (TLSE_tamanho(um_caminho) < TLSE_tamanho(menor_caminho)) {
-        TLSE_libera(menor_caminho); // !!!
-        menor_caminho = TLSE_copia(um_caminho);
-      }
+TLSE* busca_por_filho_1(TLSE* l, int filho_1){
+    TLSE* aux = l;
+    for(aux; aux!=NULL; aux = aux->prox) {
+        if (aux->filho_1 == filho_1)
+            return filho_1           
     }
-    free(visitados);
-    TLSE_libera(um_caminho);    
-  }
+    return NULL;
+}
+TLSE* busca_por_filho_2(TLSE* l, int filho_2){
+    TLSE* aux = l;
+    for(aux; aux!=NULL; aux = aux->prox) {
+        if (aux->filho_2 == filho_2)
+            return filho_2           
+    }
+    return NULL;
+}
 
-  return menor_caminho;
+int teste(TG *g) {
+    TLSE* elementos_arvore = TLSE_inicializa();
+    TG* aux = g;
+    while(aux) {
+        // 1) Cada nó do grafo não pode apontar para mais que dois nós
+        int conta_vizinhos = 0;
+        for (TVIZ* vizinho = aux->prim_viz; vizinho; vizinho = vizinho->prox_viz)
+            conta_vizinhos++;
+        if (conta_vizinhos >= 3)
+            return 0    
+
+        // 2) Cada nó só pode ser apontado por um nó (só pode ter um pai)
+        for (TVIZ* vizinho = aux->prim_viz; vizinho; vizinho = vizinho->prox_viz)
+            if ((busca_por_filho_1(elementos_arvore, vizinho->id_viz) != NULL) || (busca_por_filho_1(elementos_arvore, vizinho->id_viz) != NULL))
+                return 0;   
+
+        if (conta_vizinhos == 0)
+            elementos_arvore = TLSE_insere(elementos_arvore, aux->id_no, NULL, NULL);
+        else if (conta_vizinhos == 1)
+            elementos_arvore = TLSE_insere(elementos_arvore, aux->id_no, aux->prim_viz->id_viz, NULL);
+        else if(conta_vizinhos == 2)
+            elementos_arvore = TLSE_insere(elementos_arvore, aux->id_no, aux->prim_viz->id_viz, aux->prim_viz->prox_viz->id_viz);
+            
+        aux = aux->prox_no;    
+    }
+    return 1;
 }
