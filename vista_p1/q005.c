@@ -93,7 +93,7 @@ void dfs_conect(TG *g, int id_atual, int *visitado) {
     }
 }
 
-// É conectado
+// É conectado  
 int eh_conectado(TG *g) {
     if (!g) return 0;
 
