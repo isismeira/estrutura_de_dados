@@ -4,7 +4,8 @@
         "q006.h": "c",
         "q001_q002.h": "c",
         "q003.h": "c",
-        "q005.h": "c"
+        "q005.h": "c",
+        "stdio.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
