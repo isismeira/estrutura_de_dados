@@ -99,8 +99,8 @@ TARVBM *divisao(TARVBM *x, int i, TARVBM* y, int t){
     }
   }
   else {
-    z->nchaves = t; //z possuirá uma chave a mais que y se for folha
-    for(j=0;j < t;j++) z->chave[j] = y->chave[j+t-1];//Caso em que y é folha, temos q passar a info para o nó da direita
+    z->nchaves = t; //z possuirï¿½ uma chave a mais que y se for folha
+    for(j=0;j < t;j++) z->chave[j] = y->chave[j+t-1];//Caso em que y ï¿½ folha, temos q passar a info para o nï¿½ da direita
     z->prox = y->prox; //ultima revisao: 04/2020
     y->prox = z;
   }
@@ -157,7 +157,7 @@ TARVBM *TARVBM_insere(TARVBM *T, int mat, int t){
 }
 
 
-TARVBM* remover(TARVBM* arv, int ch, int t){
+TARVBM* remover_bm(TARVBM* arv, int ch, int t){
   if(!arv) return arv;
   int i;
   for(i = 0; i < arv->nchaves && arv->chave[i] < ch; i++);
@@ -196,7 +196,7 @@ TARVBM* remover(TARVBM* arv, int ch, int t){
       for(j=0; j < z->nchaves; j++)       //ajustar filhos de z
         z->filho[j] = z->filho[j+1];
       z->nchaves--;
-      arv->filho[i] = remover(arv->filho[i], ch, t);
+      arv->filho[i] = remover_bm(arv->filho[i], ch, t);
       return arv;
     }
     if((i > 0) && (!z) && (arv->filho[i-1]->nchaves >= t)){ //CASO 3A
@@ -221,7 +221,7 @@ TARVBM* remover(TARVBM* arv, int ch, int t){
       //enviar ponteiro de z para o novo elemento em y
       y->filho[0] = z->filho[z->nchaves];
       z->nchaves--;
-      arv->filho[i] = remover(y, ch, t);
+      arv->filho[i] = remover_bm(y, ch, t);
       return arv;
     }
     if(!z){ //CASO 3B
@@ -248,7 +248,7 @@ TARVBM* remover(TARVBM* arv, int ch, int t){
           //TARVBM_libera(z); 07/2024
         }
         TARVBM_libera(z); // 07/2024
-        for(j=i; j < arv->nchaves-1; j++){ //limpar referências de i
+        for(j=i; j < arv->nchaves-1; j++){ //limpar referï¿½ncias de i
           arv->chave[j] = arv->chave[j+1];
           arv->filho[j+1] = arv->filho[j+2];
         }
@@ -260,7 +260,7 @@ TARVBM* remover(TARVBM* arv, int ch, int t){
           temp->filho[0] = NULL;
           TARVBM_libera(temp);
         }
-        arv = remover(arv, ch, t);
+        arv = remover_bm(arv, ch, t);
         return arv;
       }
       if((i > 0) && (arv->filho[i-1]->nchaves == t-1)){ 
@@ -297,23 +297,23 @@ TARVBM* remover(TARVBM* arv, int ch, int t){
           arv = arv->filho[0];
           temp->filho[0] = NULL;
           TARVBM_libera(temp);
-          arv = remover(arv, ch, t);
+          arv = remover_bm(arv, ch, t);
         }
         else{
           i--;
-          arv->filho[i] = remover(arv->filho[i], ch, t);
+          arv->filho[i] = remover_bm(arv->filho[i], ch, t);
         }
         return arv;
       }
     }
   }  
-  arv->filho[i] = remover(arv->filho[i], ch, t);
+  arv->filho[i] = remover_bm(arv->filho[i], ch, t);
   return arv;
 }
 
 
 TARVBM* TARVBM_retira(TARVBM* arv, int k, int t){
   if(!arv || !TARVBM_busca(arv, k)) return arv;
-  return remover(arv, k, t);
+  return remover_bm(arv, k, t);
 }
 
