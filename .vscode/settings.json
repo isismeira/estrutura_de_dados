@@ -5,7 +5,9 @@
         "q001_q002.h": "c",
         "q003.h": "c",
         "q005.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "tarvb.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

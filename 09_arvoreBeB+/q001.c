@@ -69,6 +69,9 @@ int main() {
     arv = TARVB_Insere(arv, 15, t);
     arv = TARVB_Insere(arv, 12, t);
     arv = TARVB_Insere(arv, 21, t);
+    arv = TARVB_Insere(arv, 29, t);
+    arv = TARVB_Insere(arv, 28, t);
+    arv = TARVB_Insere(arv, 11, t);
 
     printf("Árvore B:\n");
     TARVB_Imprime(arv);
