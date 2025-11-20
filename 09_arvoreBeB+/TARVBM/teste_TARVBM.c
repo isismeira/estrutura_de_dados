@@ -1,5 +1,9 @@
 #include "TARVBM.h"
 
+// gcc teste_TARVBM.c TARVBM.c -o teste_TARVBM
+
+// 1 64 12 18 66 38 95 58 59 70 68 39 62 7 55 43 16 67 34 35
+
 //2 50 40 30 20 10 15
 //-9 40
 //-9 50
