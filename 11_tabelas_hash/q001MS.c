@@ -224,11 +224,9 @@ void inter(char* arq1, char* arq2, char* saida) {
     FILE *out = fopen(saida, "w");
 
     int x;
-
     // Insere todos número de arq1 na hash
     while (fscanf(f1, "%d", &x) == 1)
         TH_insere(tabHash, dados, n, x);
-
 
     // Para cada número de arq 2, procura ele na Hash e se ele estiver lá, grava no output
     while (fscanf(f2, "%d", &x) == 1) {
@@ -259,7 +257,7 @@ void dif_sim(char* arq1, char* arq2, char* saida) {
 
     int y;    
     while (fscanf(f2, "%d", &y) == 1) {
-        if (TH_busca(tabHash, dados, n, y)) { //!
+        if (TH_busca(tabHash, dados, n, y)) { 
             TH_retira(tabHash,dados, n, y);
         } else {
             TH_insere(tabHash, dados, n, y);
@@ -268,7 +266,6 @@ void dif_sim(char* arq1, char* arq2, char* saida) {
     
     FILE *dadosfp = fopen(dados, "rb");
     TN aux;
-
     while (fread(&aux, sizeof(TN), 1, dadosfp)) {
         if (aux.status == 1)
             fprintf(out, "%d\n", aux.valor);

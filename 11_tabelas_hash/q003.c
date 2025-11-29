@@ -180,58 +180,18 @@ void TH_imprime (char *tabHash, char *dados, int tam){
 void misc(char *arqa, char *arqb, char *saida, int K) {
     char dados[] = "dados_a.bin";
     char tabHash[] = "hash_a.bin";
+    int tam = 1000
 
     TH_inicializa(dados, tabHash, K);
 
     FILE *fa = fopen(arqa, "rb");
-    if(!fa) { printf("Erro ao abrir %s\n", arqa); return; }
-
-    int num;
-    while(fread(&num, sizeof(int), 1, fa) == 1) {
-        int resto = num % K;
-        if(resto < 0) resto += K;
-
-        TH_insere(tabHash, dados, K, num);
-    }
-    fclose(fa);
-
     FILE *fb = fopen(arqb, "rb");
-    if(!fb) { printf("Erro ao abrir %s\n", arqb); return; }
 
-    FILE *fsaida = fopen(saida, "wb");
-    if(!fsaida) { printf("Erro ao criar %s\n", saida); return; }
-
-    FILE *fpDados = fopen(dados, "rb");
-    FILE *fpHash = fopen(tabHash, "rb");
-
-    int vet[K];
-    fread(vet, sizeof(int), K, fpHash);
-
-    while(fread(&num, sizeof(int), 1, fb) == 1) {
-        int restoB = num % K;
-        if(restoB < 0) restoB += K;
-
-        int complemento = K - restoB;
-        if(complemento == K) complemento = 0;
-
-        int pos = vet[complemento];
-
-        while(pos != -1) {
-            TNUM nodo;
-            fseek(fpDados, pos, SEEK_SET);
-            fread(&nodo, sizeof(TNUM), 1, fpDados);
-
-            int restoA = nodo.num % K;
-            if(restoA < 0) restoA += K;
-
-            if(restoA + restoB == K) {
-                fwrite(&nodo.num, sizeof(int), 1, fsaida);
-                fwrite(&num,      sizeof(int), 1, fsaida);
-            }
-
-            pos = nodo.prox;
-        }
-    }
+    int x;
+    while (fscanf(fa, "%d", &x) == 1) {
+      int restoA = x % K;
+      
+    } 
 
     fclose(fb);
     fclose(fpDados);

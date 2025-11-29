@@ -201,27 +201,27 @@ void misc(char **arqs, int n, int porc, char *saida){
         }
         fclose(fp);
     }
-
     
-    // Agora buscar números que aparecem em pelo menos 'porc'% dos arquivos
-    // Para isso, precisamos contar em quantos arquivos cada número aparece
+    // Agora buscar números que aparecem em pelo menos 'porc'% dos arquivo. Para isso, precisamos contar em quantos arquivos cada número aparece
+
+    // Abre o arquivo de saida para escrita
     FILE *fp_saida = fopen(saida, "w");
     if(!fp_saida) {
         printf("Erro ao criar arquivo de saída\n");
         return;
     }
-    
-    // Percorrer a tabela hash para encontrar números frequentes
+
+    // Abre hash.dat e passa todo vetor de indices em hash.dat para MP
     FILE *fph = fopen("hash.dat", "rb");
     if(!fph) {
         fclose(fp_saida);
         return;
-    }
-    
+    }  
     int vet[tam];
     fread(vet, sizeof(int), tam, fph);
     fclose(fph);
     
+    // Abre dados.dat
     FILE *fp_dados = fopen("dados.dat", "rb");
     if(!fp_dados) {
         fclose(fp_saida);
@@ -234,12 +234,13 @@ void misc(char **arqs, int n, int porc, char *saida){
     printf("Procurando números que aparecem em pelo menos %d de %d arquivos (%d%%)\n", 
            min_arquivos, n, porc);
     
+    // Percorre a tabela hash e navega pelas listas encadeadas  
     int i_hash;
     for(i_hash = 0; i_hash < tam; i_hash++){
-        int pos = vet[i_hash];
-        
-        while(pos != -1){
-            TNUM elemento;
+        int pos = vet[i_hash]; // contém a posição em "dados.dat" onde está o primeiro elemento do bucket
+        while(pos != -1){ // Percorre a lista encadeada até encontrar -1
+            // Lê e guarda o elemento naqurla poscao 
+            TNUM elemento; 
             fseek(fp_dados, pos, SEEK_SET);
             fread(&elemento, sizeof(TNUM), 1, fp_dados);
             
@@ -248,7 +249,7 @@ void misc(char **arqs, int n, int porc, char *saida){
                 fprintf(fp_saida, "%d\n", elemento.num);
                 printf("Número %d aparece em %d arquivos\n", elemento.num, elemento.qtde);
             }
-            
+            // Passa para o próximo elemento da lista encadaeada
             pos = elemento.prox;
         }
     }
